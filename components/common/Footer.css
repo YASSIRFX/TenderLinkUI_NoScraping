@@ -1,0 +1,17 @@
+/* src/components/common/Footer.css */
+.footer {
+  background: linear-gradient(135deg, #7F00FF, #E100FF);
+  color: #fff;
+  text-align: center;
+  padding: 1rem 0;
+  width: 100%;
+  /* Removed fixed positioning to allow a sticky footer layout */
+  /* position: fixed;
+     bottom: 0;
+     left: 0; */
+  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.footer-text {
+  font-size: 0.9rem;
+}

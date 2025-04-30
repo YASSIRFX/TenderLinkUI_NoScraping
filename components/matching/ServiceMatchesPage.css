@@ -1,0 +1,24 @@
+/* reuse keyframes from global CSS */
+@keyframes fadeIn { from { opacity: 0; transform: translateY(20px);} to { opacity: 1; transform: translateY(0);} }
+@keyframes floating {0% {transform: translateY(0);}50% {transform: translateY(-10px);}100% {transform: translateY(0);}}
+@keyframes buttonGlow {from {box-shadow: 0 0 10px rgba(142,68,173,0.2);} to {box-shadow: 0 0 20px rgba(142,68,173,0.4);} }
+
+.management-container {
+  max-width: 1000px;
+  margin: 2rem auto;
+  padding: 2.5rem;
+  background: linear-gradient(45deg, #F8F1FF 0%, #A3B8FF 100%);
+  border-radius: 20px;
+  box-shadow: 0 8px 32px rgba(142,68,173,0.1);
+  animation: fadeIn 0.8s ease-out;
+  color: #2c3e50;
+}
+.management-container h1 { color: #8E44AD; font-size: 2rem; margin-bottom: 1.5rem; }
+.loading, .error { text-align: center; color: #e74c3c; margin: 2rem 0; }
+.items-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px,1fr)); gap: 1.5rem; margin-bottom: 2rem; }
+.item-card { background:#fff; padding:1.5rem; border-radius:15px; box-shadow:0 6px 18px rgba(142,68,173,0.12); transition: transform .3s, box-shadow .3s; }
+.item-card:hover { transform: translateY(-5px); box-shadow:0 10px 25px rgba(142,68,173,0.2); }
+.item-card h3 { color:#8E44AD; margin-bottom:0.75rem; }
+.item-card p { margin:0.5rem 0; line-height:1.4; }
+.btn-secondary { padding:0.8rem 1.5rem; background:transparent; border:2px solid #A3B8FF; color:#8E44AD; border-radius:50px; font-size:1rem; cursor:pointer; transition:background .3s,transform .3s; animation:buttonGlow 2s infinite alternate; }
+.btn-secondary:hover { background:rgba(163,184,255,0.2); transform:translateY(-2px); }

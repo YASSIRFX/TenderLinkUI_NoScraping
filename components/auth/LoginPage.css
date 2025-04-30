@@ -1,0 +1,189 @@
+/* Keyframe animations */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes floating {
+    0%   { transform: translateY(0); }
+    50%  { transform: translateY(-10px); }
+    100% { transform: translateY(0); }
+  }
+  @keyframes buttonGlow {
+    from { box-shadow: 0 0 10px rgba(142, 68, 173, 0.2); }
+    to   { box-shadow: 0 0 20px rgba(142, 68, 173, 0.4); }
+  }
+  @keyframes buttonPulse {
+    from { transform: translateY(-2px) scale(1); }
+    to   { transform: translateY(-2px) scale(1.02); }
+  }
+  @keyframes buttonShine {
+    from { transform: translateX(-50%) rotate(45deg); }
+    to   { transform: translateX(150%) rotate(45deg); }
+  }
+  
+  /* Make box-sizing consistent */
+  * {
+    box-sizing: border-box;
+  }
+  
+  /* ─────────────────────────────────────────────
+     LOGIN PAGE
+  ───────────────────────────────────────────── */
+  .login-page {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f3f3f3;
+    overflow: hidden; /* hide any scrollbars on login */
+  }
+  
+  .overlay {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: rgba(255,255,255,0.1);
+    backdrop-filter: blur(5px);
+  }
+  
+  .login-container {
+    position: relative;
+    z-index: 1;
+    animation: fadeIn 0.8s ease-out;
+  }
+  
+  .login-form {
+    background: rgba(255,255,255,0.95);
+    padding: 2.5rem;
+    border-radius: 20px;
+    box-shadow: 0 8px 32px rgba(142, 68, 173, 0.1);
+    width: 400px;
+    display: flex;
+    flex-direction: column;
+    transform: translateY(0);
+    transition: transform 0.3s ease;
+    animation: floating 4s ease-in-out infinite;
+    overflow: hidden;
+  }
+  
+  .login-form:hover {
+    animation-play-state: paused;
+  }
+  
+  .login-form h2 {
+    color: #8E44AD;
+    text-align: center;
+    margin-bottom: 2rem;
+    font-size: 2rem;
+  }
+  
+  .form-group {
+    margin-bottom: 1.5rem;
+    width: 100%;
+    position: relative;
+  }
+  
+  .form-group label {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.5rem;
+    color: #8E44AD;
+    font-weight: 500;
+  }
+  
+  .input-icon {
+    margin-right: 8px;
+    color: #8E44AD;
+  }
+  
+  .form-group input {
+    width: 100%;
+    padding: 1rem;
+    border: 2px solid #E3E3E3;
+    border-radius: 10px;
+    font-size: 1rem;
+    background: #F8F1FF;
+    transition: all 0.3s ease;
+  }
+  
+  .form-group input:focus {
+    outline: none;
+    border-color: #A3B8FF;
+    box-shadow: 0 0 0 3px rgba(163, 184, 255, 0.2);
+  }
+  
+  .button-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 1.5rem;
+  }
+  
+  .login-button {
+    position: relative;
+    overflow: hidden;
+    padding: 0.8rem 1.5rem;
+    background: linear-gradient(135deg, #8E44AD 0%, #A3B8FF 100%);
+    color: white;
+    border: none;
+    border-radius: 50px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    animation: buttonGlow 2s infinite alternate;
+    min-width: 120px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 45px;
+  }
+  
+  .button-icon {
+    margin-right: 8px;
+  }
+  
+  .login-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 25px rgba(142, 68, 173, 0.4);
+    animation: buttonPulse 0.6s infinite alternate;
+  }
+  
+  .login-button::after {
+    content: '';
+    position: absolute;
+    top: -50%; left: -50%;
+    width: 200%; height: 200%;
+    background: linear-gradient(
+      45deg,
+      transparent 25%,
+      rgba(255,255,255,0.1) 50%,
+      transparent 75%
+    );
+    animation: buttonShine 3s infinite linear;
+    border-radius: 50px;
+  }
+  
+  .error-message {
+    color: #8E44AD;
+    background: rgba(142, 68, 173, 0.1);
+    padding: 1rem;
+    border-radius: 10px;
+    margin-bottom: 1.5rem;
+    border: 1px solid rgba(142, 68, 173, 0.2);
+    animation: fadeIn 0.3s ease-out;
+  }
+  
+  @media (max-width: 480px) {
+    .login-form {
+      width: 90%;
+      padding: 1.5rem;
+    }
+    .login-button {
+      padding: 0.6rem 1.2rem;
+      min-width: 100px;
+      height: 40px;
+      font-size: 0.9rem;
+    }
+  }
+  

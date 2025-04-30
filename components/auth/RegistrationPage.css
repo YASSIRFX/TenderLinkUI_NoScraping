@@ -1,0 +1,123 @@
+/* RegistrationPage.css */
+
+.registration-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: calc(100vh - 4rem);
+  background: none;
+  padding: 2rem 0;
+}
+
+.overlay {
+  display: none;
+}
+
+.registration-container {
+  background: #fff;
+  width: 100%;
+  max-width: 480px;
+  border-radius: 12px;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.08);
+  padding: 2rem 2.5rem;
+  animation: fadeIn 0.6s ease-out;
+}
+
+.registration-form h2 {
+  font-size: 2rem;
+  color: #8E44AD;
+  text-align: center;
+  margin-bottom: 1.75rem;
+}
+
+.registration-form .form-group {
+  margin-bottom: 1.5rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.registration-form label {
+  margin-bottom: 0.5rem;
+  color: #5D3FD3;
+  font-weight: 500;
+}
+
+.registration-form input,
+.registration-form select {
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  border: 1.5px solid #ddd;
+  border-radius: 8px;
+  background: #faf7ff;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.registration-form input:focus,
+.registration-form select:focus {
+  outline: none;
+  border-color: #8E44AD;
+  box-shadow: 0 0 0 4px rgba(142, 68, 173, 0.15);
+}
+
+.button-container {
+  text-align: center;
+}
+
+.register-button {
+  padding: 0.85rem 2rem;
+  background: linear-gradient(135deg, #8E44AD 0%, #A3B8FF 100%);
+  color: #fff;
+  border: none;
+  border-radius: 50px;
+  font-size: 1.05rem;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  position: relative;
+  overflow: hidden;
+}
+
+.register-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(142, 68, 173, 0.3);
+}
+
+.register-button::after {
+  content: '';
+  position: absolute;
+  top: -50%; left: -50%;
+  width: 200%; height: 200%;
+  background: linear-gradient(
+    45deg,
+    transparent 25%,
+    rgba(255,255,255,0.15) 50%,
+    transparent 75%
+  );
+  animation: buttonShine 3s infinite linear;
+  border-radius: 50px;
+}
+
+/* Scrollbar only in dashboard-content */
+.dashboard-content::-webkit-scrollbar {
+  width: 8px;
+}
+.dashboard-content::-webkit-scrollbar-track {
+  background: #ececec;
+  border-radius: 4px;
+}
+.dashboard-content::-webkit-scrollbar-thumb {
+  background: rgba(142, 68, 173, 0.6);
+  border-radius: 4px;
+}
+.dashboard-content::-webkit-scrollbar-thumb:hover {
+  background: rgba(142, 68, 173, 0.8);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes buttonShine {
+  from { transform: translateX(-50%) rotate(45deg); }
+  to   { transform: translateX(150%) rotate(45deg); }
+}

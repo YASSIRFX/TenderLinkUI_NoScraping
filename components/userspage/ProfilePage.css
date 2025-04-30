@@ -1,0 +1,76 @@
+/* src/components/userspage/ProfilePage.css */
+
+/* Keyframe animations, similar to login/registration */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  @keyframes floating {
+    0% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+    100% { transform: translateY(0); }
+  }
+  
+  @keyframes buttonGlow {
+    from { box-shadow: 0 0 10px rgba(142, 68, 173, 0.2); }
+    to { box-shadow: 0 0 20px rgba(142, 68, 173, 0.4); }
+  }
+  
+  @keyframes buttonPulse {
+    from { transform: translateY(-2px) scale(1); }
+    to { transform: translateY(-2px) scale(1.02); }
+  }
+  
+  /* Profile Page Container */
+  .profile-page-container {
+    max-width: 600px;
+    margin: 50px auto;      /* provides spacing from the header */
+    padding: 2rem;
+    background: linear-gradient(45deg, #F8F1FF 0%, #A3B8FF 100%);
+    border-radius: 20px;
+    box-shadow: 0 8px 32px rgba(142, 68, 173, 0.1);
+    animation: fadeIn 0.8s ease-out, floating 4s ease-in-out infinite;
+  }
+  
+  /* Header */
+  .profile-page-container h2 {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    color: #8E44AD;
+    font-size: 2rem;
+  }
+  
+  /* Profile details */
+  .profile-page-container p {
+    font-size: 1.1rem;
+    color: #333;
+    margin-bottom: 1rem;
+  }
+  
+  /* Button styling, matching login/register buttons */
+  .profile-page-container button {
+    background: linear-gradient(135deg, #8E44AD 0%, #A3B8FF 100%);
+    color: #fff;
+    border: none;
+    border-radius: 50px;
+    padding: 0.8rem 1.5rem;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    animation: buttonGlow 2s infinite alternate;
+  }
+  
+  /* Hover effect for button */
+  .profile-page-container button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 25px rgba(142, 68, 173, 0.4);
+    animation: buttonPulse 0.6s infinite alternate;
+  }
+  
+  /* Link inside the button */
+  .profile-page-container button a {
+    color: inherit;
+    text-decoration: none;
+  }
+  

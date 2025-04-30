@@ -1,0 +1,142 @@
+/* src/components/userspage/UpdateUser.css */
+
+/* Keyframe animations, similar to login/registration theme */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  @keyframes floating {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+    100% { transform: translateY(0px); }
+  }
+  
+  @keyframes buttonGlow {
+    from { box-shadow: 0 0 10px rgba(142, 68, 173, 0.2); }
+    to { box-shadow: 0 0 20px rgba(142, 68, 173, 0.4); }
+  }
+  
+  @keyframes buttonPulse {
+    from { transform: translateY(-2px) scale(1); }
+    to { transform: translateY(-2px) scale(1.02); }
+  }
+  
+  @keyframes buttonShine {
+    from { transform: translateX(-50%) rotate(45deg); }
+    to { transform: translateX(150%) rotate(45deg); }
+  }
+  
+  /* Container styling for the update user page */
+  .update-user-container {
+    max-width: 400px;
+    margin: 50px auto;
+    padding: 2.5rem;
+    background: linear-gradient(45deg, #F8F1FF 0%, #A3B8FF 100%);
+    border-radius: 20px;
+    box-shadow: 0 8px 32px rgba(142, 68, 173, 0.1);
+    animation: fadeIn 0.8s ease-out, floating 4s ease-in-out infinite;
+  }
+  
+  /* Form header styling */
+  .update-user-container h2 {
+    text-align: center;
+    margin-bottom: 2rem;
+    color: #8E44AD;
+    font-size: 2rem;
+  }
+  
+  /* Form group styling */
+  .form-group {
+    margin-bottom: 1.5rem;
+    width: 100%;
+  }
+  
+  .form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #8E44AD;
+    font-weight: 500;
+  }
+  
+  .form-group input {
+    width: 100%;
+    padding: 1rem;
+    border: 2px solid #E3E3E3;
+    border-radius: 10px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    background: #F8F1FF;
+  }
+  
+  .form-group input:focus {
+    outline: none;
+    border-color: #A3B8FF;
+    box-shadow: 0 0 0 3px rgba(163, 184, 255, 0.2);
+  }
+  
+  /* Button container */
+  .button-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 1.5rem;
+  }
+  
+  /* Update button styling, similar to login/register buttons */
+  .update-button {
+    padding: 0.8rem 1.5rem;
+    background: linear-gradient(135deg, #8E44AD 0%, #A3B8FF 100%);
+    color: white;
+    border: 2px solid #A3B8FF;
+    border-radius: 50px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    animation: buttonGlow 2s infinite alternate;
+    min-width: 120px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 45px;
+  }
+  
+  .update-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 25px rgba(142, 68, 173, 0.4);
+    animation: buttonPulse 0.6s infinite alternate;
+  }
+  
+  .update-button::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(
+      45deg,
+      transparent 25%,
+      rgba(255, 255, 255, 0.1) 50%,
+      transparent 75%
+    );
+    animation: buttonShine 3s infinite linear;
+    border-radius: 50px;
+  }
+  .update-user-form select {
+    width: 100%;
+    padding: 1rem;
+    border: 2px solid #E3E3E3;
+    border-radius: 10px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    background: #F8F1FF;
+  }
+  
+  .update-user-form select:focus {
+    outline: none;
+    border-color: #A3B8FF;
+    box-shadow: 0 0 0 3px rgba(163, 184, 255, 0.2);
+  }
+  
