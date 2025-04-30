@@ -1,0 +1,15 @@
+# 1) Ignore all node_modules anywhere
+**/node_modules/
+
+# 2) Ignore everything
+*
+
+# 3) But do track these files/folders:
+!/.gitignore
+!/package.json
+!/README.md
+!/src/          # un-ignore the src folder
+!/src/**       # un-ignore everything inside src
+
+# 4) Except this one subfolder:
+
