@@ -120,9 +120,15 @@
   font-weight: bold;
   color: white;
 }
-.badge-haute { background: #e74c3c; }
-.badge-moyenne { background: #f39c12; }
-.badge-basse { background: #2ecc71; }
+.badge-high {
+  background: #e74c3c; /* rouge */
+}
+.badge-medium {
+  background: #f39c12; /* orange */
+}
+.badge-low {
+  background: #2ecc71; /* vert */
+}
 
 /* Skeleton Card */
 .list-container .skeleton-card {

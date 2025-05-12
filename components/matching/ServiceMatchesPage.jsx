@@ -53,7 +53,7 @@ const ServiceMatchesPage = () => {
             {matches.map(({ tender, matchScore, improvements, matchingExplanation }) => (
               <div className="item-card" key={tender.id}>
                 {/* Priority badge, if you track it on the tender */}
-                {tender.priority && (
+                {tender?.priority && (
                   <span className={`badge badge-${tender.priority.toLowerCase()}`}>
                     {tender.priority}
                   </span>

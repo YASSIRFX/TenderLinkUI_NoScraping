@@ -1,4 +1,6 @@
-import React, { useEffect, useState } from 'react';
+// src/components/tenders/TendersListPage.js
+
+import React, { useEffect, useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import TenderService from '../../services/TenderService';
 import { useAuth } from '../../AuthContext';
@@ -12,14 +14,16 @@ const TendersListPage = () => {
   const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const loadTenders = async () => {
+  // ── Wrap in useCallback ────────────────────────────────────────────────────
+  const loadTenders = useCallback(async () => {
     try {
       const data = await TenderService.getAllTenders();
       setTenders(data);
     } catch {
       showMessage('Erreur lors du chargement des appels d’offres.');
     }
-  };
+  }, []);  // no dependencies needed here
+  // ─────────────────────────────────────────────────────────────────────────
 
   const handleScrape = async () => {
     setLoading(true);
@@ -50,12 +54,12 @@ const TendersListPage = () => {
 
   useEffect(() => {
     loadTenders();
-  }, []);
+  }, [loadTenders]);  // ✅ no more missing-deps warning
 
   return (
     <div className="list-container">
       <header className="header">
-        <h1 className="page-title"> Liste des Appels d’Offres📄</h1>
+        <h1 className="page-title">Liste des Appels d’Offres 📄</h1>
         {isAdmin && (
           <button
             className="btn btn-primary director"
@@ -90,12 +94,10 @@ const TendersListPage = () => {
                 <p><strong>Date limite :</strong> {new Date(t.dateHeureLimiteRemisePlis).toLocaleString()}</p>
                 <p><strong>Estimation :</strong> {t.estimation} DH</p>
                 <p><strong>Caution :</strong> {t.cautionProvisoire} DH</p>
-                <p><strong>Domaine :</strong> {t.domain}</p>
+                <p><strong>Catégorie :</strong> {t.categorie}</p>
                 <p><strong>Acheteur :</strong> {t.acheteurPublic}</p>
                 <p><strong>Lieu :</strong> {t.lieuExecution}</p>
                 <p><strong>Procédure :</strong> {t.procedure}</p>
-                <p><strong>Priority :</strong> {t.priority}</p>
-
                 <p>
                   <a href={t.detailUrl} target="_blank" rel="noopener noreferrer">
                     Voir détails

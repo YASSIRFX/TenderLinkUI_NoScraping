@@ -33,10 +33,11 @@ class TenderService {
       }
     
       /** GET /api/tenders/by-domain?domain=… */
-      static async getByDomain(domain) {
+      
+      static async getByCategorie(categorie) {
         const { data } = await axios.get(
-          `${this.BASE_URL}/api/tenders/by-domain`,
-          { params: { domain } }
+          `${this.BASE_URL}/api/tenders/by-categorie`,
+          { params: { categorie } }
         );
         return data;
       }
