@@ -8,7 +8,7 @@ import './ServiceMatchesPage.css';
 
 const ServiceMatchesPage = () => {
   const { id: serviceId } = useParams();
-  const { token, isAdmin } = useAuth();
+  const { token } = useAuth();
   const navigate = useNavigate();
 
   const [serviceName, setServiceName] = useState('');

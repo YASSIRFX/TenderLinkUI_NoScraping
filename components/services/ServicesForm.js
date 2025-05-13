@@ -28,7 +28,7 @@ const ServicesForm = () => {
     if (id) {
       fetchService();
     }
-  }, [id]);
+  }, [id, fetchCategories, fetchService]);
 
   const fetchCategories = async () => {
     try {

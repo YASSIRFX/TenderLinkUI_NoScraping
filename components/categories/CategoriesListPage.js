@@ -28,42 +28,6 @@ const CategoriesListPage = () => {
     fetchCategories();
   }, []);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!categoryName) {
-      showMessage("Category name cannot be empty");
-      return;
-    }
-
-    try {
-      if (isEditing) {
-        await CategoryService.updateCategory(
-          editingCategoryId,
-          { name: categoryName },
-          token
-        );
-        showMessage("Category updated successfully");
-      } else {
-        await CategoryService.createCategory({ name: categoryName }, token);
-        showMessage("Category created successfully");
-      }
-
-      const updatedData = await CategoryService.getAllCategories();
-      setCategories(updatedData);
-      resetForm();
-    } catch (error) {
-      showMessage(
-        error.response?.data?.message || "Error processing request"
-      );
-    }
-  };
-
-  const handleEdit = (category) => {
-    setIsEditing(true);
-    setEditingCategoryId(category.id);
-    setCategoryName(category.name);
-  };
-
   const handleDelete = async (id) => {
     if (window.confirm("Delete this category?")) {
       try {
@@ -145,7 +109,6 @@ const CategoriesListPage = () => {
           </div>
         ))}
       </div>
-
     </div>
   );
 };

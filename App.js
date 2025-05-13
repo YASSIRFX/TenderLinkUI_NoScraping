@@ -21,16 +21,17 @@ import ServiceMatchesPage from './components/matching/ServiceMatchesPage';
 
 import DashboardLayout from './components/layout/DashboardLayout';
 import { AuthProvider, AuthContext } from './AuthContext';
-import './App.css';
 
 function App() {
   return (
     <AuthProvider>
       <BrowserRouter>
+        <div className="min-h-screen bg-background-light dark:bg-background-dark text-text-light dark:text-text-dark transition-colors duration-300">
           <HeaderComponent />
-          <div className="content">
+          <div className="content pt-16">
             <AppRoutes />
           </div>
+        </div>
       </BrowserRouter>
     </AuthProvider>
   );
@@ -71,6 +72,7 @@ function AppRoutes() {
           <Route path="/update-user/:userId" element={<UpdateUser />} />
         
           {/* Service Management */}
+        
           <Route path="/admin/services" element={<ServicesListPage />} />
           <Route path="/admin/services/new" element={<ServicesForm />} />
           <Route path="/admin/services/edit/:id" element={<ServicesForm />} />
@@ -91,7 +93,6 @@ function AppRoutes() {
           <Route path="/tenders" element={<TendersListPage />} />
           </>
           <Route path="/services/:id/matches" element={<ServiceMatchesPage />} />
-
 
 
         </>

@@ -15,7 +15,7 @@ const CategoryForm = () => {
 
   useEffect(() => {
     if (id) fetchCategory();
-  }, [id]);
+  }, [id, fetchCategory]);
 
   const fetchCategory = async () => {
     try {
