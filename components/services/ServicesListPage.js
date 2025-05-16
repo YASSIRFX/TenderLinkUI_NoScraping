@@ -1,89 +1,91 @@
-import React, { useEffect, useState } from "react";
+// ServicesListPage.jsx
+import React, { useEffect, useState, useCallback } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import ServiceService from "../../services/ServiceService";
 import { useAuth } from "../../AuthContext";
+import ServiceService from "../../services/ServiceService";
 import "./ServicesListPage.css";
 
 const ServicesListPage = () => {
   const { token, isAdmin } = useAuth();
   const navigate = useNavigate();
+
   const [services, setServices] = useState([]);
   const [message, setMessage] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
+  const [selectedService, setSelectedService] = useState(null);
 
-  useEffect(() => {
-    const fetchServices = async () => {
-      try {
-        const data = await ServiceService.getAllServices();
-        setServices(data);
-      } catch (error) {
-        showMessage(
-          error.response?.data?.message || "Error fetching services"
-        );
-      }
-    };
-    fetchServices();
+  // 1) Named fetch function
+  const fetchServices = useCallback(async () => {
+    try {
+      const data = await ServiceService.getAllServices();
+      setServices(data);
+    } catch (err) {
+      showMessage(err.response?.data?.message || "Error fetching services");
+    }
   }, []);
 
-  const handleDelete = async (id) => {
-    if (window.confirm("Delete this service?")) {
-      try {
-        await ServiceService.deleteService(id, token);
-        setServices(services.filter((service) => service.id !== id));
-        showMessage("Service deleted successfully");
-      } catch (error) {
-        showMessage(
-          error.response?.data?.message || "Error deleting service"
-        );
-      }
-    }
-  };
+  // Initial load
+  useEffect(() => {
+    fetchServices();
+  }, [fetchServices]);
 
   const showMessage = (msg) => {
     setMessage(msg);
     setTimeout(() => setMessage(""), 4000);
   };
 
-  const filteredServices = services.filter((service) => {
-    const serviceName = service.name ? service.name.toLowerCase() : "";
-    const subCategory = service.subCategory ? service.subCategory.toLowerCase() : "";
-    const categoryName = service.category?.name?.toLowerCase() || "";
+  // Filter logic
+  const filtered = services.filter((service) => {
     const term = searchTerm.toLowerCase();
     return (
-      serviceName.includes(term) ||
-      subCategory.includes(term) ||
-      categoryName.includes(term)
+      service.name?.toLowerCase().includes(term) ||
+      service.subCategory?.toLowerCase().includes(term) ||
+      service.category?.name?.toLowerCase().includes(term)
     );
   });
 
   return (
-    <div className="management-container">
-      {message && <div className="alert">{message}</div>}
+    <div className="list-container">
+      {message && <div className="toast">{message}</div>}
 
-      <div className="list-header">
-        <h1>Services Management</h1>
-        {isAdmin && (
-          <button
-            className="btn btn-primary"
-            onClick={() => navigate("/admin/services/new")}
-          >
-            + New Service
-          </button>
-        )}
-      </div>
-
-      <div className="search-bar">
-        <input
-          type="text"
-          className="form-input"
-          placeholder="Search services..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-        />
-      </div>
+      <header className="header">
+        <h1 className="page-title">Services Management</h1>
+        <div className="actions-group">
+          <div className="search-wrapper">
+            <div className="search-input-group">
+              <span className="icon">🔍</span>
+              <input
+                className="search-input"
+                type="text"
+                placeholder="Search services..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+              {searchTerm && (
+                <span
+                  className="clear-btn"
+                  onClick={() => setSearchTerm("")}
+                >
+                  ✖
+                </span>
+              )}
+            </div>
+          </div>
+          {isAdmin && (
+            <button
+              className="btn btn-primary new-service-btn"
+              onClick={() => navigate("/admin/services/new")}
+            >
+              <span className="btn-icon">✚</span> New Service
+            </button>
+          )}
+        </div>
+        <p className="results-count">{filtered.length} services</p>
+      </header>
 
       <div className="items-grid">
-        {filteredServices.map((service) => (
+        {filtered.map((service) => (
           <div className="item-card" key={service.id}>
             <h3>{service.name}</h3>
             <p>Category: {service.category?.name || "N/A"}</p>
@@ -104,28 +106,56 @@ const ServicesListPage = () => {
                     className="btn btn-edit"
                     onClick={() => navigate(`/admin/services/edit/${service.id}`)}
                   >
-                    Edit
+                    <span className="btn-icon">✏️</span> Edit
                   </button>
                   <button
                     className="btn btn-danger"
-                    onClick={() => handleDelete(service.id)}
+                    onClick={() => setSelectedService(service)}
                   >
-                    Delete
+                    <span className="btn-icon">🗑️</span> Delete
                   </button>
                 </>
               )}
-
-              {/* New View Matches button */}
               <button
                 className="btn btn-primary"
                 onClick={() => navigate(`/services/${service.id}/matches`)}
               >
-                View Matches
+                <span className="btn-icon">👁️</span> View Matches
               </button>
             </div>
           </div>
         ))}
       </div>
+
+      {/* Modal de confirmation de suppression */}
+      {selectedService && (
+        <div className="modal-backdrop">
+          <div className="confirmation-modal">
+            <h3>Confirmer la suppression</h3>
+            <p>Êtes-vous sûr de vouloir supprimer le service "{selectedService.name}" ?</p>
+            <div className="modal-actions">
+              <button className="btn" onClick={() => setSelectedService(null)}>
+                Annuler
+              </button>
+              <button
+                className="btn btn-danger"
+                onClick={async () => {
+                  try {
+                    await ServiceService.deleteService(selectedService.id, token);
+                    setServices(services.filter((s) => s.id !== selectedService.id));
+                    showMessage("Service deleted successfully");
+                  } catch (error) {
+                    showMessage(error.response?.data?.message || "Error deleting service");
+                  }
+                  setSelectedService(null);
+                }}
+              >
+                Supprimer
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

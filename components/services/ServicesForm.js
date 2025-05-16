@@ -1,3 +1,4 @@
+// ServicesForm.jsx
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import ServiceService from "../../services/ServiceService";
@@ -10,195 +11,152 @@ const ServicesForm = () => {
   const navigate = useNavigate();
   const { token } = useAuth();
 
-  // State variables for service fields
-  const [serviceName, setServiceName] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState("");
-  const [subCategory, setSubCategory] = useState("");
-  const [capabilities, setCapabilities] = useState(""); // comma-separated text
-  const [constraints, setConstraints] = useState("");
-  const [cost, setCost] = useState("");
-  const [deliveryTime, setDeliveryTime] = useState("");
+  // Form state
+  const [formData, setFormData] = useState({
+    name: "",
+    categoryId: "",
+    subCategory: "",
+    capabilities: "",
+    constraints: "",
+    cost: "",
+    deliveryTime: ""
+  });
+  const [categories, setCategories] = useState([]);
   const [message, setMessage] = useState("");
 
-  // For populating the category dropdown
-  const [categories, setCategories] = useState([]);
-
   useEffect(() => {
-    fetchCategories();
+    // Fetch categories
+    CategoryService.getAllCategories()
+      .then(setCategories)
+      .catch(() => showMessage("Error loading categories"));
+
+    // If editing, load service
     if (id) {
-      fetchService();
+      ServiceService.getServiceById(id)
+        .then((svc) => {
+          setFormData({
+            name: svc.name || "",
+            categoryId: svc.category?.id || "",
+            subCategory: svc.subCategory || "",
+            capabilities: svc.capabilities?.join(", ") || "",
+            constraints: svc.constraints || "",
+            cost: svc.cost || "",
+            deliveryTime: svc.deliveryTime || ""
+          });
+        })
+        .catch(() => showMessage("Error loading service"));
     }
-  }, [id, fetchCategories, fetchService]);
-
-  const fetchCategories = async () => {
-    try {
-      const data = await CategoryService.getAllCategories();
-      setCategories(data);
-    } catch (error) {
-      showMessage("Error loading categories");
-    }
-  };
-
-  const fetchService = async () => {
-    try {
-      const data = await ServiceService.getServiceById(id);
-      setServiceName(data.name);
-      setSelectedCategory(data.category ? data.category.id : "");
-      setSubCategory(data.subCategory || "");
-      setCapabilities(data.capabilities ? data.capabilities.join(", ") : "");
-      setConstraints(data.constraints || "");
-      setCost(data.cost || "");
-      setDeliveryTime(data.deliveryTime || "");
-    } catch (error) {
-      showMessage("Error loading service");
-    }
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!serviceName) {
-      showMessage("Service name is required");
-      return;
-    }
-    if (!selectedCategory) {
-      showMessage("Please select a category");
-      return;
-    }
-    // Build the service object
-    const serviceData = {
-      name: serviceName,
-      category: { id: selectedCategory },
-      subCategory,
-      capabilities: capabilities
-        .split(",")
-        .map((cap) => cap.trim())
-        .filter(Boolean),
-      constraints,
-      cost: parseFloat(cost),
-      deliveryTime,
-    };
-
-    try {
-      if (id) {
-        await ServiceService.updateService(id, serviceData, token);
-        // No error means update succeeded: navigate immediately
-        navigate("/admin/services");
-      } else {
-        await ServiceService.createService(serviceData, token);
-        navigate("/admin/services");
-      }
-    } catch (error) {
-      console.error("Update error:", error);
-      showMessage(error.response?.data?.message || "Operation failed");
-    }
-  };
+  }, [id]);
 
   const showMessage = (msg) => {
     setMessage(msg);
     setTimeout(() => setMessage(""), 4000);
   };
 
+  const handleChange = ({ target: { name, value } }) => {
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!formData.name || !formData.categoryId) return showMessage("Please fill required fields");
+
+    const payload = {
+      name: formData.name,
+      category: { id: formData.categoryId },
+      subCategory: formData.subCategory,
+      capabilities: formData.capabilities.split(",").map((c) => c.trim()).filter(Boolean),
+      constraints: formData.constraints,
+      cost: parseFloat(formData.cost) || 0,
+      deliveryTime: formData.deliveryTime
+    };
+
+    try {
+      if (id) await ServiceService.updateService(id, payload, token);
+      else await ServiceService.createService(payload, token);
+      navigate("/admin/services");
+    } catch (err) {
+      showMessage(err.response?.data?.message || "Operation failed");
+    }
+  };
+
   return (
-    <div className="management-container">
-      <div className="form-container">
+    <div className="form-wrapper">
+      <div className="form-header">
         <h2>{id ? "Edit" : "Create"} Service</h2>
-        {message && <div className="alert">{message}</div>}
-        <form onSubmit={handleSubmit}>
-          <div className="form-group">
-            <label className="form-label">Service Name</label>
-            <input
-              type="text"
-              className="form-input"
-              value={serviceName}
-              onChange={(e) => setServiceName(e.target.value)}
-              required
-            />
-          </div>
-
-          <div className="form-group">
-            <label className="form-label">Category</label>
-            <select
-              className="form-input"
-              value={selectedCategory}
-              onChange={(e) => setSelectedCategory(e.target.value)}
-              required
-            >
-              <option value="">Select a category</option>
-              {categories.map((cat) => (
-                <option key={cat.id} value={cat.id}>
-                  {cat.name}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          <div className="form-group">
-            <label className="form-label">Sub-Category</label>
-            <input
-              type="text"
-              className="form-input"
-              value={subCategory}
-              onChange={(e) => setSubCategory(e.target.value)}
-            />
-          </div>
-
-          <div className="form-group">
-            <label className="form-label">
-              Capabilities (comma separated)
-            </label>
-            <input
-              type="text"
-              className="form-input"
-              value={capabilities}
-              onChange={(e) => setCapabilities(e.target.value)}
-            />
-          </div>
-
-          <div className="form-group">
-            <label className="form-label">Constraints</label>
-            <input
-              type="text"
-              className="form-input"
-              value={constraints}
-              onChange={(e) => setConstraints(e.target.value)}
-            />
-          </div>
-
-          <div className="form-group">
-            <label className="form-label">Cost</label>
-            <input
-              type="number"
-              className="form-input"
-              value={cost}
-              onChange={(e) => setCost(e.target.value)}
-              step="0.01"
-            />
-          </div>
-
-          <div className="form-group">
-            <label className="form-label">Delivery Time</label>
-            <input
-              type="date"
-              className="form-input"
-              value={deliveryTime}
-              onChange={(e) => setDeliveryTime(e.target.value)}
-            />
-          </div>
-
-          <div className="form-actions">
-            <button type="submit" className="btn btn-primary">
-              {id ? "Update" : "Create"}
-            </button>
-            <button
-              type="button"
-              className="btn btn-secondary"
-              onClick={() => navigate("/admin/services")}
-            >
-              Cancel
-            </button>
-          </div>
-        </form>
       </div>
+      {message && <div className="toast">{message}</div>}
+      <form className="form-grid" onSubmit={handleSubmit}>
+        <div className="form-group">
+          <label className="form-label">Service Name *</label>
+          <input
+            name="name"
+            type="text"
+            className="form-input"
+            value={formData.name}
+            onChange={handleChange}
+            placeholder="Enter service name"
+            required
+          />
+        </div>
+
+        <div className="form-group">
+          <label className="form-label">Category *</label>
+          <select
+            name="categoryId"
+            className="form-input"
+            value={formData.categoryId}
+            onChange={handleChange}
+            required
+          >
+            <option value="">Select category</option>
+            {categories.map((cat) => (
+              <option key={cat.id} value={cat.id}>{cat.name}</option>
+            ))}
+          </select>
+        </div>
+
+        <div className="form-group">
+          <label className="form-label">Sub-category</label>
+          <input name="subCategory" type="text" className="form-input"
+              value={formData.subCategory} onChange={handleChange}
+              placeholder="Optional" />
+        </div>
+
+        <div className="form-group">
+          <label className="form-label">Capabilities</label>
+          <input name="capabilities" type="text" className="form-input"
+              value={formData.capabilities} onChange={handleChange}
+              placeholder="Comma-separated list" />
+        </div>
+
+        <div className="form-group">
+          <label className="form-label">Constraints</label>
+          <input name="constraints" type="text" className="form-input"
+              value={formData.constraints} onChange={handleChange}
+              placeholder="Any constraints" />
+        </div>
+
+        <div className="form-group">
+          <label className="form-label">Cost</label>
+          <input name="cost" type="number" className="form-input"
+              value={formData.cost} onChange={handleChange}
+              step="0.01" placeholder="0.00" />
+        </div>
+
+        <div className="form-group">
+          <label className="form-label">Delivery Time</label>
+          <input name="deliveryTime" type="date" className="form-input"
+              value={formData.deliveryTime} onChange={handleChange} />
+        </div>
+
+        <div className="form-actions">
+          <button type="submit" className="btn btn-primary">
+            {id ? "Update" : "Create"}
+          </button>
+          <button type="button" className="btn btn-secondary" onClick={() => navigate("/admin/services")}>Cancel</button>
+        </div>
+      </form>
     </div>
   );
 };
